@@ -14,13 +14,13 @@ export function GenerationOutput({ isGenerating, generatedImage, onDownload }: G
   return (
     <Card className="h-fit">
       <CardHeader>
-        <CardTitle>Generated Figurine</CardTitle>
+        <CardTitle>generated figurine</CardTitle>
       </CardHeader>
       <CardContent>
         {isGenerating ? (
           <div className="flex flex-col items-center justify-center py-12 space-y-4">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <p className="text-sm text-muted-foreground retro">Generating your figurine...</p>
+            <p className="text-sm text-muted-foreground retro">generating your figurine...</p>
           </div>
         ) : generatedImage ? (
           <div className="space-y-4">
@@ -35,13 +35,13 @@ export function GenerationOutput({ isGenerating, generatedImage, onDownload }: G
             {onDownload && (
               <Button onClick={onDownload} className="w-full">
                 <Download className="w-4 h-4 mr-2" />
-                Download
+                download
               </Button>
             )}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-            <p className="text-sm retro">Your generated figurine will appear here</p>
+            <p className="text-sm retro">your generated figurine will appear here</p>
           </div>
         )}
       </CardContent>

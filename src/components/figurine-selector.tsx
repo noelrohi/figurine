@@ -4,12 +4,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/8bit/label'
 
 const FIGURINE_TYPES = [
-  { value: 'funko-pop', label: 'Funko Pop' },
-  { value: 'action-figure', label: 'Action Figure' },
-  { value: 'chibi', label: 'Chibi Style' },
-  { value: 'realistic', label: 'Realistic Figurine' },
-  { value: 'anime', label: 'Anime Style' },
-  { value: 'cartoon', label: 'Cartoon Style' },
+  { value: 'funko-pop', label: 'funko pop' },
+  { value: 'action-figure', label: 'action figure' },
+  { value: 'chibi', label: 'chibi style' },
+  { value: 'realistic', label: 'realistic figurine' },
+  { value: 'anime', label: 'anime style' },
+  { value: 'cartoon', label: 'cartoon style' },
 ] as const
 
 export type FigurineType = typeof FIGURINE_TYPES[number]['value']
@@ -22,10 +22,10 @@ interface FigurineSelectorProps {
 export function FigurineSelector({ value, onValueChange }: FigurineSelectorProps) {
   return (
     <div className="space-y-2">
-      <Label htmlFor="figurine-type">Figurine Type</Label>
+      <Label htmlFor="figurine-type">figurine type</Label>
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger>
-          <SelectValue placeholder="Select figurine type" />
+          <SelectValue placeholder="select figurine type" />
         </SelectTrigger>
         <SelectContent className="z-50">
           {FIGURINE_TYPES.map((type) => (

@@ -60,14 +60,14 @@ export function ImageDropzone({ onImageSelect }: ImageDropzoneProps) {
             <Upload className="w-12 h-12 text-muted-foreground" />
             <div>
               <p className="text-lg font-medium retro">
-                {isDragActive ? 'Drop the image here' : 'Drag & drop an image here'}
+                {isDragActive ? 'drop the image here' : 'drag & drop an image here'}
               </p>
               <p className="text-sm text-muted-foreground mt-1 retro">
                 or click to select a file
               </p>
             </div>
             <p className="text-xs text-muted-foreground retro">
-              Supports: JPG, PNG, WEBP
+              supports: jpg, png, webp
             </p>
           </div>
         </div>

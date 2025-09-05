@@ -26,33 +26,33 @@ export function ApiKeyDialog({ apiKey, onApiKeyChange }: ApiKeyDialogProps) {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Settings className="w-4 h-4 mr-2" />
-          API Key
+          api key
         </Button>
       </DialogTrigger>
       <DialogContent className="p-6">
         <DialogHeader>
-          <DialogTitle>Configure API Key</DialogTitle>
+          <DialogTitle>configure api key</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="api-key">API Key</Label>
+            <Label htmlFor="api-key">api key</Label>
             <Input
               id="api-key"
               type="password"
-              placeholder="Enter your API key"
+              placeholder="enter your api key"
               value={tempApiKey}
               onChange={(e) => setTempApiKey(e.target.value)}
             />
             <p className="text-sm text-muted-foreground retro">
-              Your API key is stored locally and never sent to our servers.
+              your api key is stored locally and never sent to our servers.
             </p>
           </div>
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
+              cancel
             </Button>
             <Button onClick={handleSave}>
-              Save
+              save
             </Button>
           </div>
         </div>

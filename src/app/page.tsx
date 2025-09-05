@@ -57,9 +57,9 @@ export default function Home() {
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-2 retro">
               <Sparkles className="w-8 h-8 text-primary" />
-              Figurine AI
+              figurine ai
             </h1>
-            <p className="text-muted-foreground retro">Transform your photos into custom figurines</p>
+            <p className="text-muted-foreground retro">transform your photos into custom figurines</p>
           </div>
           <ApiKeyDialog apiKey={apiKey} onApiKeyChange={handleApiKeyChange} />
         </div>
@@ -70,7 +70,7 @@ export default function Home() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Upload Image</CardTitle>
+                <CardTitle>upload image</CardTitle>
               </CardHeader>
               <CardContent>
                 <ImageDropzone onImageSelect={setSelectedImage} />
@@ -79,7 +79,7 @@ export default function Home() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Configure Figurine</CardTitle>
+                <CardTitle>configure figurine</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <FigurineSelector 
@@ -94,11 +94,11 @@ export default function Home() {
                   disabled={!canGenerate || isGenerating}
                 >
                   {isGenerating ? (
-                    <>Generating...</>
+                    <>generating...</>
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4 mr-2" />
-                      Generate Figurine
+                      generate figurine
                     </>
                   )}
                 </Button>
