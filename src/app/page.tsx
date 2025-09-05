@@ -1,103 +1,124 @@
-import Image from "next/image";
+"use client"
+
+import { useState, useEffect } from 'react'
+import '@/components/ui/8bit/styles/retro.css'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/8bit/card'
+import { Button } from '@/components/ui/8bit/button'
+import { ImageDropzone } from '@/components/image-dropzone'
+import { FigurineSelector, type FigurineType } from '@/components/figurine-selector'
+import { ApiKeyDialog } from '@/components/api-key-dialog'
+import { GenerationOutput } from '@/components/generation-output'
+import { Sparkles } from 'lucide-react'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [figurineType, setFigurineType] = useState<FigurineType>()
+  const [apiKey, setApiKey] = useState('')
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Load API key from localStorage on mount
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem('figurine-ai-api-key')
+    if (savedApiKey) {
+      setApiKey(savedApiKey)
+    }
+  }, [])
+
+  // Save API key to localStorage when changed
+  const handleApiKeyChange = (newApiKey: string) => {
+    setApiKey(newApiKey)
+    localStorage.setItem('figurine-ai-api-key', newApiKey)
+  }
+
+  const handleGenerate = async () => {
+    if (!selectedImage || !figurineType || !apiKey) {
+      alert('Please select an image, figurine type, and set your API key')
+      return
+    }
+
+    setIsGenerating(true)
+    
+    // TODO: Implement actual API call
+    // For now, simulate generation
+    setTimeout(() => {
+      setGeneratedImage('/placeholder-figurine.jpg') // This would be the actual generated image
+      setIsGenerating(false)
+    }, 3000)
+  }
+
+  const canGenerate = selectedImage && figurineType && apiKey
+
+  return (
+    <div className="min-h-screen bg-muted/50 p-4 retro">
+      <div className="container mx-auto max-w-7xl">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2 retro">
+              <Sparkles className="w-8 h-8 text-primary" />
+              Figurine AI
+            </h1>
+            <p className="text-muted-foreground retro">Transform your photos into custom figurines</p>
+          </div>
+          <ApiKeyDialog apiKey={apiKey} onApiKeyChange={handleApiKeyChange} />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Main Content */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Left Side - Form */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Upload Image</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ImageDropzone onImageSelect={setSelectedImage} />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Configure Figurine</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <FigurineSelector 
+                  value={figurineType} 
+                  onValueChange={setFigurineType} 
+                />
+                
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  onClick={handleGenerate}
+                  disabled={!canGenerate || isGenerating}
+                >
+                  {isGenerating ? (
+                    <>Generating...</>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Generate Figurine
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Side - Output */}
+          <div>
+            <GenerationOutput 
+              isGenerating={isGenerating}
+              generatedImage={generatedImage}
+              onDownload={() => {
+                // TODO: Implement download functionality
+                console.log('Download clicked')
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
