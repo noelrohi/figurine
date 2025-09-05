@@ -46,6 +46,18 @@ export function ApiKeyDialog({ apiKey, onApiKeyChange }: ApiKeyDialogProps) {
             <p className="text-sm text-muted-foreground retro">
               your api key is stored locally and never sent to our servers.
             </p>
+            <p className="text-sm text-muted-foreground retro">
+              get your api key from{' '}
+              <a
+                href="https://aistudio.google.com/app/apikey"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:no-underline"
+              >
+                google ai studio
+              </a>
+              {' '}by clicking "create api key" then "copy".
+            </p>
           </div>
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={() => setIsOpen(false)}>

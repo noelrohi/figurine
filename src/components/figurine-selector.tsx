@@ -2,17 +2,9 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/8bit/select'
 import { Label } from '@/components/ui/8bit/label'
+import { FIGURINE_OPTIONS, type FigurineOption } from '@/lib/google-genai'
 
-const FIGURINE_TYPES = [
-  { value: 'funko-pop', label: 'funko pop' },
-  { value: 'action-figure', label: 'action figure' },
-  { value: 'chibi', label: 'chibi style' },
-  { value: 'realistic', label: 'realistic figurine' },
-  { value: 'anime', label: 'anime style' },
-  { value: 'cartoon', label: 'cartoon style' },
-] as const
-
-export type FigurineType = typeof FIGURINE_TYPES[number]['value']
+export type FigurineType = FigurineOption['id']
 
 interface FigurineSelectorProps {
   value?: FigurineType
@@ -28,9 +20,9 @@ export function FigurineSelector({ value, onValueChange }: FigurineSelectorProps
           <SelectValue placeholder="select figurine type" />
         </SelectTrigger>
         <SelectContent className="z-50">
-          {FIGURINE_TYPES.map((type) => (
-            <SelectItem key={type.value} value={type.value}>
-              {type.label}
+          {FIGURINE_OPTIONS.map((option) => (
+            <SelectItem key={option.id} value={option.id}>
+              {option.title}
             </SelectItem>
           ))}
         </SelectContent>

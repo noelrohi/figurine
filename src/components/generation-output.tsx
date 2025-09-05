@@ -1,5 +1,6 @@
 "use client"
 
+import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/8bit/card'
 import { Button } from '@/components/ui/8bit/button'
 import { Download, Loader2 } from 'lucide-react'
@@ -25,9 +26,11 @@ export function GenerationOutput({ isGenerating, generatedImage, onDownload }: G
         ) : generatedImage ? (
           <div className="space-y-4">
             <div className="relative">
-              <img
+              <Image
                 src={generatedImage}
                 alt="Generated figurine"
+                width={400}
+                height={400}
                 className="w-full rounded-none border-4 border-foreground"
                 style={{ imageRendering: 'pixelated' }}
               />

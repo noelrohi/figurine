@@ -2,11 +2,12 @@
 
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import Image from 'next/image'
 import { Upload, X } from 'lucide-react'
 import { Button } from '@/components/ui/8bit/button'
 
 interface ImageDropzoneProps {
-  onImageSelect: (file: File) => void
+  onImageSelect: (file: File | null) => void
 }
 
 export function ImageDropzone({ onImageSelect }: ImageDropzoneProps) {
@@ -26,7 +27,7 @@ export function ImageDropzone({ onImageSelect }: ImageDropzoneProps) {
       URL.revokeObjectURL(preview)
     }
     setPreview(null)
-    onImageSelect(null as any)
+    onImageSelect(null)
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -74,9 +75,11 @@ export function ImageDropzone({ onImageSelect }: ImageDropzoneProps) {
       ) : (
         <div className="relative">
           <div className="border-4 border-foreground rounded-none p-4 bg-muted/50">
-            <img
+            <Image
               src={preview}
               alt="Preview"
+              width={400}
+              height={192}
               className="w-full h-48 object-contain rounded-none pixelated"
               style={{ imageRendering: 'pixelated' }}
             />

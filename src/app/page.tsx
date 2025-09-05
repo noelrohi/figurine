@@ -9,10 +9,12 @@ import { FigurineSelector, type FigurineType } from '@/components/figurine-selec
 import { ApiKeyDialog } from '@/components/api-key-dialog'
 import { GenerationOutput } from '@/components/generation-output'
 import { Sparkles } from 'lucide-react'
+import { generateFigurineImage, FIGURINE_OPTIONS } from '@/lib/google-genai'
+import { toast } from 'sonner'
 
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [figurineType, setFigurineType] = useState<FigurineType>()
+  const [figurineType, setFigurineType] = useState<FigurineType>('original')
   const [apiKey, setApiKey] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
@@ -31,20 +33,51 @@ export default function Home() {
     localStorage.setItem('figurine-ai-api-key', newApiKey)
   }
 
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) {
+      const message = error.message
+      if (message.includes('quota')) {
+        return 'API quota exceeded. Please check your billing.'
+      }
+      if (message.includes('RESOURCE_EXHAUSTED')) {
+        return 'API limit reached. Please try again later.'
+      }
+      if (message.includes('INVALID_ARGUMENT')) {
+        return 'Invalid request. Please try a different image.'
+      }
+      if (message.includes('UNAUTHENTICATED')) {
+        return 'Invalid API key. Please check your credentials.'
+      }
+      if (message.includes('PERMISSION_DENIED')) {
+        return 'Access denied. Please verify your API permissions.'
+      }
+      return 'Generation failed. Please try again.'
+    }
+    return 'Unknown error occurred.'
+  }
+
   const handleGenerate = async () => {
     if (!selectedImage || !figurineType || !apiKey) {
-      alert('Please select an image, figurine type, and set your API key')
+      toast.error('Please select an image, figurine type, and set your API key')
       return
     }
 
     setIsGenerating(true)
-    
-    // TODO: Implement actual API call
-    // For now, simulate generation
-    setTimeout(() => {
-      setGeneratedImage('/placeholder-figurine.jpg') // This would be the actual generated image
+
+    try {
+      const selectedOption = FIGURINE_OPTIONS.find(option => option.id === figurineType)
+      if (!selectedOption) {
+        throw new Error('Selected figurine type not found')
+      }
+
+      const generatedImageUrl = await generateFigurineImage(selectedImage, selectedOption.prompt, apiKey)
+      setGeneratedImage(generatedImageUrl)
+    } catch (error) {
+      console.error('Generation failed:', error)
+      toast.error(getErrorMessage(error))
+    } finally {
       setIsGenerating(false)
-    }, 3000)
+    }
   }
 
   const canGenerate = selectedImage && figurineType && apiKey
@@ -82,13 +115,13 @@ export default function Home() {
                 <CardTitle>configure figurine</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <FigurineSelector 
-                  value={figurineType} 
-                  onValueChange={setFigurineType} 
+                <FigurineSelector
+                  value={figurineType}
+                  onValueChange={setFigurineType}
                 />
-                
-                <Button 
-                  className="w-full" 
+
+                <Button
+                  className="w-full"
                   size="lg"
                   onClick={handleGenerate}
                   disabled={!canGenerate || isGenerating}
@@ -108,12 +141,18 @@ export default function Home() {
 
           {/* Right Side - Output */}
           <div>
-            <GenerationOutput 
+            <GenerationOutput
               isGenerating={isGenerating}
               generatedImage={generatedImage}
               onDownload={() => {
-                // TODO: Implement download functionality
-                console.log('Download clicked')
+                if (generatedImage) {
+                  const link = document.createElement('a')
+                  link.href = generatedImage
+                  link.download = 'figurine.png'
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
+                }
               }}
             />
           </div>
