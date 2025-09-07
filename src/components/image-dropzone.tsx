@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
 import { Upload, X } from 'lucide-react'
 import { Button } from '@/components/ui/8bit/button'
+import '@/components/ui/8bit/styles/retro.css'
 
 interface ImageDropzoneProps {
   onImageSelect: (file: File | null) => void
@@ -44,18 +45,21 @@ export function ImageDropzone({ onImageSelect }: ImageDropzoneProps) {
         <div
           {...getRootProps()}
           className={`
-            border-2 border-dashed rounded-none p-8 text-center cursor-pointer transition-colors retro relative
-            ${isDragActive 
-              ? 'border-primary bg-primary/5' 
-              : 'border-muted-foreground hover:border-primary hover:bg-muted/50'
+            relative border-y-6 border-foreground dark:border-ring p-8 text-center cursor-pointer transition-colors retro
+            ${isDragActive
+              ? 'bg-primary/5'
+              : 'hover:bg-muted/50'
             }
           `}
-          style={{
-            borderStyle: 'solid',
-            borderWidth: '6px',
-            borderColor: isDragActive ? 'hsl(var(--primary))' : 'hsl(var(--foreground))'
-          }}
         >
+          {/* Pixelated border elements */}
+          <div className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none" aria-hidden="true" />
+          {/* Top shadow */}
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-foreground/20 pointer-events-none" />
+          <div className="absolute top-1.5 left-0 w-3 h-1.5 bg-foreground/20 pointer-events-none" />
+          {/* Bottom shadow */}
+          <div className="absolute bottom-0 left-0 w-full h-1.5 bg-foreground/20 pointer-events-none" />
+          <div className="absolute bottom-1.5 right-0 w-3 h-1.5 bg-foreground/20 pointer-events-none" />
           <input {...getInputProps()} />
           <div className="flex flex-col items-center gap-4">
             <Upload className="w-12 h-12 text-muted-foreground" />
@@ -74,13 +78,20 @@ export function ImageDropzone({ onImageSelect }: ImageDropzoneProps) {
         </div>
       ) : (
         <div className="relative">
-          <div className="border-4 border-foreground rounded-none p-4 bg-muted/50">
+          <div className="relative border-y-6 border-foreground dark:border-ring p-4 bg-muted/50">
+            <div className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none" aria-hidden="true" />
+            {/* Top shadow */}
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-foreground/20 pointer-events-none" />
+            <div className="absolute top-1.5 left-0 w-3 h-1.5 bg-foreground/20 pointer-events-none" />
+            {/* Bottom shadow */}
+            <div className="absolute bottom-0 left-0 w-full h-1.5 bg-foreground/20 pointer-events-none" />
+            <div className="absolute bottom-1.5 right-0 w-3 h-1.5 bg-foreground/20 pointer-events-none" />
             <Image
               src={preview}
               alt="Preview"
               width={400}
               height={192}
-              className="w-full h-48 object-contain rounded-none pixelated"
+              className="w-full h-48 object-contain rounded-none pixelated relative z-10"
               style={{ imageRendering: 'pixelated' }}
             />
           </div>
