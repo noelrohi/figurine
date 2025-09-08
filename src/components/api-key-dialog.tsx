@@ -56,7 +56,7 @@ export function ApiKeyDialog({ apiKey, onApiKeyChange }: ApiKeyDialogProps) {
               >
                 google ai studio
               </a>
-              {' '}by clicking "create api key" then "copy".
+              {' '}by clicking &quot;create api key&quot; then &quot;copy&quot;.
             </p>
           </div>
           <div className="flex justify-end space-x-2">
