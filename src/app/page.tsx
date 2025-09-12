@@ -18,6 +18,8 @@ export default function Home() {
   const [apiKey, setApiKey] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
+  const [isApiKeyDialogOpen, setIsApiKeyDialogOpen] = useState(false)
+  const [pendingGeneration, setPendingGeneration] = useState(false)
 
   // Load API key from localStorage on mount
   useEffect(() => {
@@ -27,10 +29,23 @@ export default function Home() {
     }
   }, [])
 
+  // Reset pending generation if dialog closes without saving
+  useEffect(() => {
+    if (!isApiKeyDialogOpen && pendingGeneration) {
+      setPendingGeneration(false)
+    }
+  }, [isApiKeyDialogOpen, pendingGeneration])
+
   // Save API key to localStorage when changed
   const handleApiKeyChange = (newApiKey: string) => {
     setApiKey(newApiKey)
     localStorage.setItem('figurine-ai-api-key', newApiKey)
+    
+    // If there was a pending generation, start it now
+    if (pendingGeneration && selectedImage && figurineType) {
+      setPendingGeneration(false)
+      handleGenerate()
+    }
   }
 
   const getErrorMessage = (error: unknown): string => {
@@ -57,8 +72,14 @@ export default function Home() {
   }
 
   const handleGenerate = async () => {
-    if (!selectedImage || !figurineType || !apiKey) {
-      toast.error('Please select an image, figurine type, and set your API key')
+    if (!selectedImage || !figurineType) {
+      toast.error('Please select an image and figurine type')
+      return
+    }
+
+    if (!apiKey) {
+      setIsApiKeyDialogOpen(true)
+      setPendingGeneration(true)
       return
     }
 
@@ -80,7 +101,7 @@ export default function Home() {
     }
   }
 
-  const canGenerate = selectedImage && figurineType && apiKey
+  const canGenerate = selectedImage && figurineType
 
   return (
     <div className="min-h-screen bg-muted/50 p-4 retro">
@@ -94,7 +115,12 @@ export default function Home() {
             </h1>
             <p className="text-muted-foreground retro">transform your photos into custom figurines</p>
           </div>
-          <ApiKeyDialog apiKey={apiKey} onApiKeyChange={handleApiKeyChange} />
+          <ApiKeyDialog 
+            apiKey={apiKey} 
+            onApiKeyChange={handleApiKeyChange}
+            isOpen={isApiKeyDialogOpen}
+            onOpenChange={setIsApiKeyDialogOpen}
+          />
         </div>
 
         {/* Main Content */}

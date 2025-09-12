@@ -10,19 +10,31 @@ import { Settings } from 'lucide-react'
 interface ApiKeyDialogProps {
   apiKey: string
   onApiKeyChange: (apiKey: string) => void
+  isOpen?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
-export function ApiKeyDialog({ apiKey, onApiKeyChange }: ApiKeyDialogProps) {
+export function ApiKeyDialog({ apiKey, onApiKeyChange, isOpen: externalIsOpen, onOpenChange: externalOnOpenChange }: ApiKeyDialogProps) {
   const [tempApiKey, setTempApiKey] = useState(apiKey)
-  const [isOpen, setIsOpen] = useState(false)
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+  
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen
+  const setIsOpen = externalOnOpenChange || setInternalIsOpen
 
   const handleSave = () => {
     onApiKeyChange(tempApiKey)
     setIsOpen(false)
   }
 
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setTempApiKey(apiKey)
+    }
+    setIsOpen(open)
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Settings className="w-4 h-4 mr-2" />
@@ -60,7 +72,7 @@ export function ApiKeyDialog({ apiKey, onApiKeyChange }: ApiKeyDialogProps) {
             </p>
           </div>
           <div className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>
+            <Button variant="outline" onClick={() => handleOpenChange(false)}>
               cancel
             </Button>
             <Button onClick={handleSave}>
